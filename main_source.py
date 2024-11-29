@@ -4,10 +4,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.edge.service import Service
 
-# 初始化浏览器
-def init_browser():
-    return webdriver.Chrome()
+
+def init_browser(config):
+    path = config.get("DRIVER_PATH")
+    s = Service(path)
+    return webdriver.Edge(service=s)
+
 
 # 读取配置信息
 def read_config(file_path):
@@ -85,10 +89,6 @@ def play_video_and_wait(browser, video_player, parent_name, mute_video):
     except TimeoutException:
         print("视频播放超时。")
 
-def check_config(phone, pwd, url1, url2):
-    if not phone or not pwd or not url1 or not url2:
-        print("配置文件不完整，请检查！")
-
 # 主函数
 def main():
     config = read_config('config.txt')
@@ -96,14 +96,16 @@ def main():
     pwd = config.get('pwd')
     url1 = config.get('url1')
     url2 = config.get('url2')
-    mute_video = config.get('muteVideo', 'false').lower() == 'true'  # 默认静音
+    mute_video = config.get('muteVideo', 'true').lower() == 'true'
 
 
     if not phone or not pwd or not url1 or not url2:
         print("配置文件不完整，请检查！")
         return  # 退出程序
 
-    browser = init_browser()
+    # browser = init_browser()
+    browser = init_browser(config)
+
     try:
         login(browser, phone, pwd, url1)
         wait_for_element(browser, By.ID, "cns-main-app")
@@ -113,7 +115,6 @@ def main():
         while True:
             video_player = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'i.icon-video')))
             icon_unfinish_parents = find_unfinished_videos(browser)
-            print("未播放的视频数量为：", len(icon_unfinish_parents))
 
             if not icon_unfinish_parents:
                 print("所有视频已播放完成，程序退出。")
