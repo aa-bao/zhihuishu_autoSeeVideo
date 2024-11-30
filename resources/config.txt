@@ -1,0 +1,16 @@
+# 智慧树的账号
+phone = "15986373998"
+# 智慧树的密码
+pwd = "Asdfghjkl456"
+# 智慧树官网，别动!!!
+url1 = "https://onlineweb.zhihuishu.com/"
+# 需要刷的课程视频页（只要是翻转课的都能刷）
+url2 = "https://hike.zhihuishu.com/aidedteaching/sourceLearning/sourceLearning?courseId=10914055&fileId=22409575"
+# 视频静音（默认静音）
+muteVideo = true
+# 浏览器驱动（chrome/edge）
+driver = edge
+# 浏览器驱动路径
+DRIVER_PATH = "D:\Download\edgedriver_win32\msedgedriver.exe"
+
+
